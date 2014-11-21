@@ -1,6 +1,16 @@
-#ifndef DEBUG_H_
-#define DEBUG_H_
+/*
+* Includes some debug statements, as well as common operators
+*/
+#ifndef COMMON_H
+#define COMMON_H
 
+// no-cost stream operator as described at 
+// http://sundial.org/arduino/?page_id=119
+template<class T>
+inline Print &operator <<(Print &obj, T arg)
+{ obj.print(arg); return obj; }
+
+//=================DEBUGS============
 //0 args
 static void debug()
 {

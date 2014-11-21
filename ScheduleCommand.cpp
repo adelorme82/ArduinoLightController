@@ -1,6 +1,6 @@
-#include "DirectControl.h"
+#include "ScheduleCommand.h"
 
-void generateHTMLDirectControl(WebServer &server)
+void generateHTMLSchedule(WebServer &server)
 {
     P(htmlHead) =
         "<html>"
@@ -86,7 +86,7 @@ void generateHTMLDirectControl(WebServer &server)
     server.printP(tableFormEnd);
 }
 
-void directControlForm(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
+void scheduleForm(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
 
     if (type == WebServer::POST)
@@ -122,6 +122,6 @@ void directControlForm(WebServer &server, WebServer::ConnectionType type, char *
 
 
     }
-    generateHTMLDirectControl(server);
+    generateHTMLSchedule(server);
 
 }

@@ -8,41 +8,16 @@
 #include <EthernetClient.h>
 #include <EthernetServer.h>
 #include <EthernetUdp.h>
-#include "WebServer.h"
+#include <WebServer.h>
 #include "Time.h" 
 
-void setClient(EthernetClient client);
-unsigned long getTime();
-unsigned long getWebUnixTime();
-
-unsigned long unixTime = 0;
-unsigned long lastTime = 0;
 EthernetClient timeClient;
 
+//For use in using the client that is hidden behind the webserver
 void setClient(EthernetClient &client)
 {
     timeClient = client;
 }
-
-// unsigned long getTime()
-// {
-//     unsigned long current = millis();
-
-//     //get web time if haven't before, and reset every hour 
-//     if (!unixTime || !(unixTime/1000 % (60 * 60)))
-//     {
-//         unixTime = getWebUnixTime();
-//     }
-//     else
-//     {
-//         unixTime += (current - lastTime);
-//     }
-
-//     lastTime = current;
-//     // Serial.print("unixTime: ");
-//     // Serial.println(unixTime);
-//     return unixTime;
-// }
 
 /*
 * http://playground.arduino.cc//Code/Webclient

@@ -7,13 +7,16 @@
 #define DIRECT_CONTROL_H
 #define WEBDUINO_NO_IMPLEMENTATION
 
-#include <Ethernet.h>
-#include <EthernetUdp.h>
-#include "WebServer.h"
-#include "debug.h"
-#include "CommonVars.h"
+// #include <Ethernet.h>
+// #include <EthernetUdp.h>
+#include <WebServer.h>
+#include "Common.h"
+
+extern int OUTLETS;
+extern int pins[];
+extern bool *pinVals;
 
 void generateHTMLDirectControl(WebServer &server);
-void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete);
+void directControlForm(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete);
 
 #endif
