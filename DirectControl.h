@@ -12,8 +12,8 @@
 #include <WebServer.h>
 #include "Common.h"
 
-extern int OUTLETS;
-extern int pins[];
+extern const int OUTLETS;
+extern const int PINS[];
 extern bool *pinVals;
 
 void generateHTMLDirectControl(WebServer &server);

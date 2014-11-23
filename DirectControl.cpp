@@ -5,7 +5,7 @@ void generateHTMLDirectControl(WebServer &server)
     P(htmlHead) =
         "<html>"
         "<head>"
-        "<title>Austin's Web Server</title>"
+        "<title>Direct Control Pins</title>"
         "</head>"
         "<body>"
         "<script>"
@@ -64,9 +64,9 @@ void generateHTMLDirectControl(WebServer &server)
         server.printP(inputPart1);
         server << i;
         server.printP(inputPart2);
-        Serial.print("pinVals[pins[i]]: ");
-        Serial.println(pinVals[pins[i]]);
-        server << i << "\" value=\"" << (pinVals[pins[i]] ? "1" : "0") << "\">";
+        Serial.print("pinVals[PINS[i]]: ");
+        Serial.println(pinVals[PINS[i]]);
+        server << i << "\" value=\"" << (pinVals[PINS[i]] ? "1" : "0") << "\">";
         
     }
 
@@ -88,6 +88,7 @@ void generateHTMLDirectControl(WebServer &server)
 
 void directControlForm(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
+    debug("directControlForm");
 
     if (type == WebServer::POST)
     {
@@ -107,7 +108,7 @@ void directControlForm(WebServer &server, WebServer::ConnectionType type, char *
                 Serial.print("pinIndex: ");
                 Serial.println(pinIndex);
 
-                int pin = pins[pinIndex];
+                int pin = PINS[pinIndex];
                 Serial.print("pin: ");
                 Serial.println(pin);
 

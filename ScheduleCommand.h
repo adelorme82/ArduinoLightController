@@ -8,12 +8,18 @@
 
 #include <WebServer.h>
 #include "Common.h"
+#include <Time.h>
 
-extern int OUTLETS;
-extern int pins[];
+extern const int OUTLETS;
+extern const int PINS[];
 extern bool *pinVals;
 
-void generateHTMLSchedule(WebServer &server);
+void generateHTMLSchedule(WebServer &server, bool showSuccess = false);
 void scheduleForm(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete);
 
+
+//helper methods to read params
+tmElements_t readTime(char* value);
+
+void addAlarmsForSelectedTimes(char daysToAdd, int* pinsToAdd, tmElements_t entered_time, bool alarmIsRepeat);
 #endif

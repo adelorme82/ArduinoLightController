@@ -14,7 +14,7 @@
 EthernetClient timeClient;
 
 //For use in using the client that is hidden behind the webserver
-void setClient(EthernetClient &client)
+void setClientForExternalTime(EthernetClient &client)
 {
     timeClient = client;
 }
