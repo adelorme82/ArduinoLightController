@@ -12,7 +12,6 @@
 #include <WebServer.h>
 #include "Common.h"
 
-extern const int OUTLETS;
 extern const int PINS[];
 extern bool *pinVals;
 

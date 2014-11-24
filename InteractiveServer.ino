@@ -7,6 +7,7 @@
 #include "ExternalTime.h"
 #include "Time.h"
 #include <TimeAlarms.h>
+#include "Callbacks.h"
 
 #include "DirectControl.h"
 #include "ScheduleCommand.h"
@@ -18,7 +19,6 @@ extern IPAddress gateway(192,168,0,1);
 extern IPAddress subnet (255,255,255,0);
 
 #define PREFIX ""
-extern const int OUTLETS = 3;
 
 extern WebServer webserver(PREFIX, 8088);
 
@@ -27,8 +27,6 @@ extern WebServer webserver(PREFIX, 8088);
 extern const int PINS[] = {5, 6, 7};
 extern bool *pinVals = NULL;
 //==========END GLOBAL VARIABLE DECLARATION================
-
-#define REQUEST_BUFFER_LEN 64
 
 void startServer()
 {
@@ -58,6 +56,11 @@ void setup()
     Serial.println("InteravtiveServer.ino"); //keep track of what is on arduino
 
     pinVals = (bool*)malloc(OUTLETS * sizeof(bool));
+    for (int pinIndex = 0; pinIndex < OUTLETS; pinIndex++)
+    {
+        int arduinoPinNumber = PINS[pinIndex];
+        pinMode(arduinoPinNumber, OUTPUT);
+    }
 
     startServer();
     EthernetClient client = webserver.getClient();
@@ -69,4 +72,8 @@ void setup()
 void loop() 
 {
     webserver.processConnection();
+    
+    //servide the registered alarms
+    Alarm.delay(0);
+
 }

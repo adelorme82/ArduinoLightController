@@ -4,6 +4,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <Arduino.h>
+
+#define OUTLETS 3
+
 // no-cost stream operator as described at 
 // http://sundial.org/arduino/?page_id=119
 template<class T>
@@ -37,6 +41,15 @@ static void debug(TypeA msg, TypeB label)
 	Serial.print(msg);
 	Serial.print(": ");
 	Serial.println(label);
+}
+
+//two args, diff types, include format
+template <typename TypeA, typename TypeB, typename format>
+static void debug(TypeA msg, TypeB label, format fmt)
+{
+	Serial.print(msg);
+	Serial.print(": ");
+	Serial.println(label, fmt);
 }
 
 #endif

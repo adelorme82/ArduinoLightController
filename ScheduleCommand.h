@@ -9,8 +9,9 @@
 #include <WebServer.h>
 #include "Common.h"
 #include <Time.h>
+#include <TimeAlarms.h>
+#include "Callbacks.h"
 
-extern const int OUTLETS;
 extern const int PINS[];
 extern bool *pinVals;
 
@@ -21,5 +22,5 @@ void scheduleForm(WebServer &server, WebServer::ConnectionType type, char *url_t
 //helper methods to read params
 tmElements_t readTime(char* value);
 
-void addAlarmsForSelectedTimes(char daysToAdd, int* pinsToAdd, tmElements_t entered_time, bool alarmIsRepeat);
+void addAlarmsForSelectedTimes(unsigned char daysToAdd, int* pinsToAdd, tmElements_t entered_time, bool alarmIsRepeat);
 #endif

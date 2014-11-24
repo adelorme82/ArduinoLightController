@@ -21,7 +21,7 @@ void generateHTMLSchedule(WebServer &server, bool showSuccess)
         "</div> "
         "<br />"
         "Repeating? <input type=\"checkbox\" name=\"repeating\"> <br/> <br/>"
-        "Time <input type=\"time\" name=\"time\" value=\""
+        "Time <input type=\"time\" name=\"time\" step=\"1\" value=\""
     ;
 
     P(htmlhead2) = 
@@ -62,12 +62,8 @@ void generateHTMLSchedule(WebServer &server, bool showSuccess)
 
     server.httpSuccess();
     server.printP(htmlHead1);
-    //set time element to now
-    debug("hour()", hour());
-    debug("minute()", minute());
-    debug("second()", second());
-    debug("isAM()", isAM());
 
+    //set time element to now
     if (hour() < 10) server << '0';
     server << hour();
     server << ':';
@@ -81,8 +77,6 @@ void generateHTMLSchedule(WebServer &server, bool showSuccess)
 
     server.printP(htmlhead2);
 
-    debug("showSuccess", showSuccess);
-    debug("OUTLETS", OUTLETS);
     for (int i = 0; i < OUTLETS; i++)
     {
         //label, correct for 0-based index
@@ -118,12 +112,9 @@ void scheduleForm(WebServer &server, WebServer::ConnectionType type, char *url_t
 
         tmElements_t entered_time;
         bool alarmIsRepeat = false;
-        debug("===============about to process params====================");
         do
         {
             repeat = server.readPOSTparam(name, buf_size, value, buf_size);
-            debug("name", name);
-            debug("value", value);
             /* valid names for inputs (x means any number):
             * dayx
             * pinx
@@ -136,13 +127,11 @@ void scheduleForm(WebServer &server, WebServer::ConnectionType type, char *url_t
                 //pin
                 case 'p':
                 {
-                    int pinIndex = strtoul(name + 4, NULL, 10);
-                    debug("pinIndex", pinIndex);
+                    int pinIndex = strtoul(name + 3, NULL, 10);
 
                     //convert value string to number representation
                     //e.g. "-1" -> -1 (int)
                     int val = atoi(value);
-                    debug("val", val);
                     pinsToAdd[pinIndex] = val;
                 }
                     break;
@@ -172,9 +161,7 @@ void scheduleForm(WebServer &server, WebServer::ConnectionType type, char *url_t
                 default: 
                     break;
             }
-            debug("======================");
         } while (repeat);
-        debug("===============finish process params====================");
 
         addAlarmsForSelectedTimes(daysToAdd, pinsToAdd, entered_time, alarmIsRepeat);
         showSuccess = true;
@@ -187,11 +174,54 @@ void scheduleForm(WebServer &server, WebServer::ConnectionType type, char *url_t
 tmElements_t readTime(char* value)
 {
     tmElements_t timeVals;
-
+    timeVals.Hour = atoi(value);
+    timeVals.Minute = atoi(value + 3);
+    timeVals.Second = atoi(value + 6);
     return timeVals;
 }
 
-void addAlarmsForSelectedTimes(char daysToAdd, int* pinsToAdd, tmElements_t entered_time, bool alarmIsRepeat)
+void addAlarmsForSelectedTimes(unsigned char daysToAdd, int* pinsToAdd, tmElements_t entered_time, bool alarmIsRepeat)
 {
+    AlarmID_t newAlarmId;
+    //allocate only once. Don't need a reference to this (managed internally by class)
+    //but constructors dont seem to want to be called without this
+
+    if (!daysToAdd) 
+    {
+        if (alarmIsRepeat)
+        {
+            newAlarmId = Alarm.alarmRepeat(entered_time.Hour, entered_time.Minute, entered_time.Second, &(AlarmCallbackHandler::alarmTriggered));
+        }
+        else
+        {
+            newAlarmId = Alarm.alarmOnce(entered_time.Hour, entered_time.Minute, entered_time.Second, &(AlarmCallbackHandler::alarmTriggered));
+        }
+        AlarmCallbackHandler::registerNewAlarm(newAlarmId, pinsToAdd);
+    }
+    else
+    {
+        timeDayOfWeek_t days[] = {dowSunday, dowMonday, dowTuesday, dowWednesday, dowThursday, dowFriday, dowSaturday} ;
+        unsigned short count = 0;
+        unsigned char currentDay;
+        while (daysToAdd && count < 8)
+        {
+            currentDay = daysToAdd & 1;
+            daysToAdd >>= 1;
+            if (currentDay)
+            {
+                if (alarmIsRepeat)
+                {
+                    newAlarmId = Alarm.alarmRepeat(days[count], entered_time.Hour, entered_time.Minute, entered_time.Second, &(AlarmCallbackHandler::alarmTriggered));
+                }
+                else
+                {
+                    newAlarmId = Alarm.alarmOnce(days[count], entered_time.Hour, entered_time.Minute, entered_time.Second, &(AlarmCallbackHandler::alarmTriggered));
+                }
+                
+                AlarmCallbackHandler::registerNewAlarm(newAlarmId, pinsToAdd);
+            }
+            count++;
+        }
+    }
 
 }
