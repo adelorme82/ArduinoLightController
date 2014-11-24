@@ -2,12 +2,17 @@
 
 void generateHTMLSchedule(WebServer &server, bool showSuccess)
 {
-    P(htmlHead1) =
+    P(htmlHead) =
         "<html>"
         "<head>"
         "<title>Schedule Events</title>"
         "</head>"
         "<body>"
+    ;
+
+    P(siteMap) = HEADER_LINKS;
+
+    P(inputSection1) =
         "<form method=\"post\">"
         "Alarm Day Of Week"
         "<div>"
@@ -24,7 +29,7 @@ void generateHTMLSchedule(WebServer &server, bool showSuccess)
         "Time <input type=\"time\" name=\"time\" step=\"1\" value=\""
     ;
 
-    P(htmlhead2) = 
+    P(inputSection2) = 
         "\"> <br /> <br/>"
         "Select Outlet "
         "<div>"
@@ -61,21 +66,27 @@ void generateHTMLSchedule(WebServer &server, bool showSuccess)
     ;
 
     server.httpSuccess();
-    server.printP(htmlHead1);
+    server.printP(htmlHead);
+    server.printP(siteMap);
+    
+
+    if (showSuccess) server << "<p>Alarm created</p>";
+
+    server.printP(inputSection1);
 
     //set time element to now
-    if (hour() < 10) server << '0';
+    if (hour() < FIRST_TWO_DIGIT_NUMBER) server << '0';
     server << hour();
     server << ':';
 
-    if (minute() < 10) server << '0';
+    if (minute() < FIRST_TWO_DIGIT_NUMBER) server << '0';
     server << minute();
     server << ':';
 
-    if (second() < 10) server << '0';
+    if (second() < FIRST_TWO_DIGIT_NUMBER) server << '0';
     server << second();
 
-    server.printP(htmlhead2);
+    server.printP(inputSection2);
 
     for (int i = 0; i < OUTLETS; i++)
     {
@@ -127,7 +138,8 @@ void scheduleForm(WebServer &server, WebServer::ConnectionType type, char *url_t
                 //pin
                 case 'p':
                 {
-                    int pinIndex = strtoul(name + 3, NULL, 10);
+                    //3 == chars in 'pin'
+                    int pinIndex = strtoul(name + 3, NULL, BASE_TEN);
 
                     //convert value string to number representation
                     //e.g. "-1" -> -1 (int)
@@ -143,7 +155,8 @@ void scheduleForm(WebServer &server, WebServer::ConnectionType type, char *url_t
                     //MSB         LSB
                     //0 0 0 0 0 0 0 0
                     //0 S F T W T M S
-                    daysToAdd |= 1 << strtoul(name + 3, NULL, 10);
+                    //3 == chars in 'day'
+                    daysToAdd |= 1 << strtoul(name + 3, NULL, BASE_TEN);
                     break;
 
                 //time
@@ -173,6 +186,9 @@ void scheduleForm(WebServer &server, WebServer::ConnectionType type, char *url_t
 
 tmElements_t readTime(char* value)
 {
+    //format is xx:xx:xx
+    //add 3 for second number to get past first 3 chars
+    //add 6 for third number to get past first 6 chars
     tmElements_t timeVals;
     timeVals.Hour = atoi(value);
     timeVals.Minute = atoi(value + 3);
@@ -203,7 +219,9 @@ void addAlarmsForSelectedTimes(unsigned char daysToAdd, int* pinsToAdd, tmElemen
         timeDayOfWeek_t days[] = {dowSunday, dowMonday, dowTuesday, dowWednesday, dowThursday, dowFriday, dowSaturday} ;
         unsigned short count = 0;
         unsigned char currentDay;
-        while (daysToAdd && count < 8)
+        unsigned short max_days = (sizeof(days) / sizeof(*days));
+        
+        while (daysToAdd && count < max_days)
         {
             currentDay = daysToAdd & 1;
             daysToAdd >>= 1;

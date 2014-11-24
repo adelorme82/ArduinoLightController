@@ -12,6 +12,8 @@
 #include <TimeAlarms.h>
 #include "Callbacks.h"
 
+#define FIRST_TWO_DIGIT_NUMBER 10
+
 extern const int PINS[];
 extern bool *pinVals;
 

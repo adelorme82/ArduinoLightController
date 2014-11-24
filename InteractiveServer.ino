@@ -62,6 +62,7 @@ void setup()
     }
     Serial.println("InteravtiveServer.ino"); //keep track of what is on arduino
 
+    //---Setup pins defined in PINS array as output
     pinVals = (bool*)malloc(OUTLETS * sizeof(bool));
     for (int pinIndex = 0; pinIndex < OUTLETS; pinIndex++)
     {
@@ -83,7 +84,7 @@ void loop()
 {
     webserver.processConnection();
     
-    //servide the registered alarms
+    //service the registered alarms
     Alarm.delay(0);
 
 }

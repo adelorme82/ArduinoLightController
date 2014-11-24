@@ -10,6 +10,14 @@
 
 #define EXTERNAL_INTERNET 1
 
+#define BASE_TEN 10
+
+#define HEADER_LINKS "<table><tr>" \
+"<td><a href=\"/control.html\">Direct Control</a></td>" \
+"<td><a href=\"/schedule.html\">Schedule Events</a></td>" \
+"<td><a href=\"/view.html\">View Scheduled Events</a></td>" \
+"</tr></table>"
+
 // no-cost stream operator as described at 
 // http://sundial.org/arduino/?page_id=119
 template<class T>

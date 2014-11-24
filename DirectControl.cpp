@@ -16,13 +16,18 @@ void generateHTMLDirectControl(WebServer &server)
         "</script>"
     ;
 
+    P(siteMap) = HEADER_LINKS;
+
     server.httpSuccess();
     server.printP(htmlHead);
+    server.printP(siteMap);
 
     P(formHead) = "<form method=\"post\">";
     P(tableFormEnd) = 
         "</table>"
         "</form>"
+        "</body>"
+        "</html>"
     ;
 
     P(inputPart1) = "<input id=\"l";
