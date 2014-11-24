@@ -52,6 +52,9 @@ void startServer()
 
     webserver.addCommand("schedule", &scheduleForm);
     webserver.addCommand("schedule.html", &scheduleForm);
+
+    webserver.addCommand("view", &generateReviewHTML);
+    webserver.addCommand("view.html", &generateReviewHTML);
 }
 
 void setup() 
