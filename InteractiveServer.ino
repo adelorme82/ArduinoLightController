@@ -2,13 +2,17 @@
 #include <Ethernet.h>
 #include <EthernetUdp.h>
 #include <WebServer.h>
+
+//---Global vars, debug methods
 #include "Common.h"
 
+//---Code to manage current time, schedule alarms, trigger actions
 #include "ExternalTime.h"
 #include "Time.h"
 #include <TimeAlarms.h>
 #include "Callbacks.h"
 
+//---Code to generate and control page actions
 #include "DirectControl.h"
 #include "ScheduleCommand.h"
 
@@ -43,7 +47,10 @@ void startServer()
     Serial.println(Ethernet.localIP());
 
     webserver.setDefaultCommand(&directControlForm);
+    webserver.addCommand("control", &directControlForm);
     webserver.addCommand("control.html", &directControlForm);
+
+    webserver.addCommand("schedule", &scheduleForm);
     webserver.addCommand("schedule.html", &scheduleForm);
 }
 
@@ -63,9 +70,12 @@ void setup()
     }
 
     startServer();
+
+    //---Borrow client from webserver to make request to
+    //---External server to get time
     EthernetClient client = webserver.getClient();
-    setClientForExternalTime(client);
-    setTimeFromWeb();
+    // setClientForExternalTime(client);
+    setTimeFromWeb(client);
 }
 
 
