@@ -1,4 +1,5 @@
 #include "ReviewAlarms.h"
+
 void generateReviewHTML(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
 	P(htmlHead) =
@@ -12,6 +13,7 @@ void generateReviewHTML(WebServer &server, WebServer::ConnectionType type, char 
     P(siteMap) = HEADER_LINKS;
 
     P(viewTableheader) = 
+		"<br />"
 		"<table>"
 		"<tr>"
 		"<th>"
@@ -45,13 +47,15 @@ void generateReviewHTML(WebServer &server, WebServer::ConnectionType type, char 
 			int min = minute(alarmTriggerTime);
 			int sec = second(alarmTriggerTime);
 			bool am = isAM(alarmTriggerTime);
-
+			hr = am ? hr : hr - 12;
 			server << "<tr>";
 			server << 	"<td>";
-			server << 		DOW[dow];
+			server << 		DOW_MAP[dow];
 			server << 	"</td>";
 			server << 	"<td>";
-			server << 		hr << ":" << min << ":" << sec;
+			server << 	       (hr  < FIRST_TWO_DIGIT_NUMBER ? "0" : "") << hr;
+			server << 	':' << (min < FIRST_TWO_DIGIT_NUMBER ? "0" : "") << min;
+			server << 	':' << (sec < FIRST_TWO_DIGIT_NUMBER ? "0" : "") << sec;
 			server << 	"</td>";
 			server << 	"<td>";
 			server << 		(am ? "AM" : "PM");

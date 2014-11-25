@@ -4,7 +4,8 @@
 #include "Common.h"
 #include <TimeAlarms.h>
 
-extern const int PINS[];
+extern const int PINS_ON[];
+extern const int PINS_OFF[];
 extern bool *pinVals;
 
 

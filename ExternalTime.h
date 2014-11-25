@@ -67,6 +67,33 @@ void setTimeFromWeb(EthernetClient &client)
                         case 'g': month = 8; break; // Aug
                     }
             }
+
+            bool hourWrap = hour < 7;
+            hour = hourWrap ? (hour + 24 - 7) : (hour - 7);
+
+            //wrapped to previous day
+            if (hourWrap)
+            {   
+                //                J   F   M   A   M   J   J   A   S   O   N   D   
+                byte monthDays[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+                //leap year
+                if (year % 4 == 0) monthDays[1] = 29;
+
+                //new years, wrap to december
+                if (day == 1 && month == 1) month = 12;
+
+                //first of month, wrap day to previous month's last day
+                if (day == 1) day = monthDays[(month - 2) % 12];
+                else day--;
+
+            }
+            debug("hour", hour);
+            debug("minute", minute);
+            debug("second", second);
+            debug("day", day);
+            debug("month", month);
+            debug("year", year);
             setTime(hour,minute,second,day,month,year); // set time to Saturday 8:29:00am Jan 1 2011
 
         }

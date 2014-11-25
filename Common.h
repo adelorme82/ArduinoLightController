@@ -12,6 +12,8 @@
 
 #define BASE_TEN 10
 
+#define FIRST_TWO_DIGIT_NUMBER 10
+
 #define HEADER_LINKS "<table><tr>" \
 "<td><a href=\"/control.html\">Direct Control</a></td>" \
 "<td><a href=\"/schedule.html\">Schedule Events</a></td>" \

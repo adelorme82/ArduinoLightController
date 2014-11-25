@@ -26,8 +26,14 @@ void AlarmCallbackHandler::updatePins()
 		int newPinVal = newPinValues[pinIndex];
 		if (newPinVal >= 0)
 		{
-			int arduinoPinNumber = PINS[pinIndex];
-			digitalWrite(arduinoPinNumber, newPinVal);
+			int arduinoPinNumberOn = PINS_ON[pinIndex];
+            int arduinoPinNumberOff = PINS_OFF[pinIndex];
+
+            digitalWrite(arduinoPinNumberOn, newPinVal);
+            digitalWrite(arduinoPinNumberOff, !newPinVal);
+
+            pinVals[pinIndex] = newPinVal;
+
 		}
 	}
 }

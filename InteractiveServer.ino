@@ -15,6 +15,7 @@
 //---Code to generate and control page actions
 #include "DirectControl.h"
 #include "ScheduleCommand.h"
+#include "ReviewAlarms.h"
 
 //==========START GLOBAL VARIABLE DECLARATION==============
 extern byte mac[6] = { 0xDE, 0xAD, 0xBE, 0xAF, 0xFE, 0xED };
@@ -28,8 +29,15 @@ extern WebServer webserver(PREFIX, 8088);
 
 //allow on-the-fly redifinition of which physical pin controls 
 //functions, which assume a 0-based, single incrementing pin scheme
-extern const int PINS[] = {5, 6, 7};
+//two arrays needed. 
+//To turn off outlet, send high to pin in PINS_OFF
+//To turn on outlet, send high to pin in PINS_ON
+extern const int PINS_ON[]  = {3, 7, 11};
+extern const int PINS_OFF[] = {5, 9, 13};
 extern bool *pinVals = NULL;
+
+extern char* DOW_MAP[7] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+
 //==========END GLOBAL VARIABLE DECLARATION================
 
 void startServer()
@@ -67,10 +75,17 @@ void setup()
 
     //---Setup pins defined in PINS array as output
     pinVals = (bool*)malloc(OUTLETS * sizeof(bool));
+
     for (int pinIndex = 0; pinIndex < OUTLETS; pinIndex++)
     {
-        int arduinoPinNumber = PINS[pinIndex];
+        pinVals[pinIndex] = false;
+
+        int arduinoPinNumber = PINS_ON[pinIndex];
         pinMode(arduinoPinNumber, OUTPUT);
+
+        arduinoPinNumber = PINS_OFF[pinIndex];
+        pinMode(arduinoPinNumber, OUTPUT);
+
     }
 
     startServer();

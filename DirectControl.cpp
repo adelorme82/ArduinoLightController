@@ -30,8 +30,8 @@ void generateHTMLDirectControl(WebServer &server)
         "</html>"
     ;
 
-    P(inputPart1) = "<input id=\"l";
-    // style=\"display:none\"
+    P(inputPart1) = "<input style=\"display:none\" id=\"l";
+    
     P(inputPart2) = "\" name=\"l";
 
     P(rowPart1) = 
@@ -69,9 +69,7 @@ void generateHTMLDirectControl(WebServer &server)
         server.printP(inputPart1);
         server << i;
         server.printP(inputPart2);
-        Serial.print("pinVals[PINS[i]]: ");
-        Serial.println(pinVals[PINS[i]]);
-        server << i << "\" value=\"" << (pinVals[PINS[i]] ? "1" : "0") << "\">";
+        server << i << "\" value=\"" << (pinVals[i] ? "1" : "0") << "\">";
         
     }
 
@@ -93,8 +91,6 @@ void generateHTMLDirectControl(WebServer &server)
 
 void directControlForm(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
-    debug("directControlForm");
-
     if (type == WebServer::POST)
     {
         bool repeat;
@@ -102,27 +98,21 @@ void directControlForm(WebServer &server, WebServer::ConnectionType type, char *
         do
         {
             repeat = server.readPOSTparam(name, 16, value, 16);
-            Serial.print("name: ");
-            Serial.println(name);
-            Serial.print("value: ");
-            Serial.println(value);
 
             if (name[0] == 'l')
             {
                 int pinIndex = strtoul(name + 1, NULL, 10);
-                Serial.print("pinIndex: ");
-                Serial.println(pinIndex);
-
-                int pin = PINS[pinIndex];
-                Serial.print("pin: ");
-                Serial.println(pin);
-
+                debug("pinIndex", pinIndex);
                 bool val = strcmp(value, "1") == 0;
+                debug("val", val);
+                int arduinoPinNumberOn = PINS_ON[pinIndex];
+                int arduinoPinNumberOff = PINS_OFF[pinIndex];
+                debug("arduinoPinNumberOn", arduinoPinNumberOn);
+                debug("arduinoPinNumberOff", arduinoPinNumberOff);
 
-                Serial.print("val: ");
-                Serial.println(val);
-                digitalWrite(pin, val);
-                pinVals[pin] = val;
+                digitalWrite(arduinoPinNumberOn, val);
+                digitalWrite(arduinoPinNumberOff, !val);
+                pinVals[pinIndex] = val;
             }
         } while (repeat);
 
