@@ -28,19 +28,29 @@ void generateReviewHTML(WebServer &server, WebServer::ConnectionType type, char 
 		"<th>"
 		"Repeating?"
 		"</th>"
-		"</tr>"
 	;
 
     server.printP(htmlHead);
     server.printP(siteMap);
 	server.printP(viewTableheader);
 
+	for (int i = 0; i < OUTLETS; i++)
+	{
+		server << "<th>";
+		server << "Outlet " << (i + 1) << " value";
+		server << "</th>";
+	}
+	server << "</tr>";
+
 	for (int i = 0; i < dtNBR_ALARMS; i++)
 	{
 		time_t alarmTriggerTime = Alarm.read(i);
 		bool repeating = Alarm.readRepeating(i);
+
 		if (alarmTriggerTime || repeating)
 		{
+			int* pinValues = AlarmCallbackHandler::getNewPinValuesForAlarm(i);
+			
 			//sunday is day 1, so subtract for 0-index
 			int dow = weekday(alarmTriggerTime) - 1;
 			int hr = hour(alarmTriggerTime);
@@ -63,6 +73,16 @@ void generateReviewHTML(WebServer &server, WebServer::ConnectionType type, char 
 			server << 	"<td>";
 			server << 		(repeating ? "Yes" : "No");
 			server << 	"</td>";
+
+			for (int pinNum = 0; pinNum < OUTLETS; pinNum++)
+			{
+				server << "<td>";
+				if (pinValues[pinNum] >= 0) server << (pinValues[pinNum] ? "On" : "Off");
+				else server << "N/A";
+
+				server << "</td>";
+			}
+
 			server << "</tr>";
 		}
 	}

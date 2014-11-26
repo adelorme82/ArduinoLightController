@@ -24,7 +24,10 @@ public:
 	//so that users do not have direct access, and can just call alarmTriggered
 	static void registerNewAlarm(AlarmID_t newAlarmId, int* pinsToAdd); 
 
+	static int* getNewPinValuesForAlarm(AlarmID_t alarmId);
+
 	void updatePins();
+
 
 	//for each entry
 	//-1 means do not change

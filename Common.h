@@ -7,12 +7,10 @@
 #include <Arduino.h>
 
 #define OUTLETS 3
-
 #define EXTERNAL_INTERNET 1
-
 #define BASE_TEN 10
-
 #define FIRST_TWO_DIGIT_NUMBER 10
+#define OUTLET_TIME_DELAY 1000
 
 #define HEADER_LINKS "<table><tr>" \
 "<td><a href=\"/control.html\">Direct Control</a></td>" \

@@ -38,3 +38,8 @@ void AlarmCallbackHandler::updatePins()
 	}
 }
 
+int* AlarmCallbackHandler::getNewPinValuesForAlarm(AlarmID_t alarmId)
+{
+	return registeredAlarms[alarmId].newPinValues; 
+}
+

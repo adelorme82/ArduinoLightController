@@ -55,6 +55,8 @@ void startServer()
     Serial.println(Ethernet.localIP());
 
     webserver.setDefaultCommand(&directControlForm);
+    webserver.addCommand("direct", &directControlForm);
+    webserver.addCommand("direct.html", &directControlForm);
     webserver.addCommand("control", &directControlForm);
     webserver.addCommand("control.html", &directControlForm);
 
@@ -93,7 +95,6 @@ void setup()
     //---Borrow client from webserver to make request to
     //---External server to get time
     EthernetClient client = webserver.getClient();
-    // setClientForExternalTime(client);
     setTimeFromWeb(client);
 }
 
