@@ -33,7 +33,6 @@ void AlarmCallbackHandler::updatePins()
             digitalWrite(arduinoPinNumberOff, !newPinVal);
 
             pinVals[pinIndex] = newPinVal;
-
 		}
 	}
 }

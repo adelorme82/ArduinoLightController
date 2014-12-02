@@ -1,3 +1,8 @@
+/* 
+* Static method that is used when an alarm is triggered
+* Which will set the state of multiple pins for one alarm 
+* Depending on what the user chose
+*/
 #ifndef CALLBACKS_H
 #define CALLBACKS_H
 

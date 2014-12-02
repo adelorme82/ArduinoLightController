@@ -102,13 +102,9 @@ void directControlForm(WebServer &server, WebServer::ConnectionType type, char *
             if (name[0] == 'l')
             {
                 int pinIndex = strtoul(name + 1, NULL, 10);
-                debug("pinIndex", pinIndex);
                 bool val = strcmp(value, "1") == 0;
-                debug("val", val);
                 int arduinoPinNumberOn = PINS_ON[pinIndex];
                 int arduinoPinNumberOff = PINS_OFF[pinIndex];
-                debug("arduinoPinNumberOn", arduinoPinNumberOn);
-                debug("arduinoPinNumberOff", arduinoPinNumberOff);
 
                 digitalWrite(arduinoPinNumberOn, val);
                 digitalWrite(arduinoPinNumberOff, !val);

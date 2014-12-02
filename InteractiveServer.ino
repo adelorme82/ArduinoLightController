@@ -25,7 +25,7 @@ extern IPAddress subnet (255,255,255,0);
 
 #define PREFIX ""
 
-extern WebServer webserver(PREFIX, 8088);
+extern WebServer webserver(PREFIX, 80);
 
 //allow on-the-fly redifinition of which physical pin controls 
 //functions, which assume a 0-based, single incrementing pin scheme
@@ -54,7 +54,10 @@ void startServer()
     Serial.print("server is at ");
     Serial.println(Ethernet.localIP());
 
+    //set functions to call when pages are visited
+    //file type doesnt matter (.html), I chose it because it's familiar
     webserver.setDefaultCommand(&directControlForm);
+    
     webserver.addCommand("direct", &directControlForm);
     webserver.addCommand("direct.html", &directControlForm);
     webserver.addCommand("control", &directControlForm);
@@ -84,9 +87,11 @@ void setup()
 
         int arduinoPinNumber = PINS_ON[pinIndex];
         pinMode(arduinoPinNumber, OUTPUT);
+        digitalWrite(arduinoPinNumber, LOW);
 
         arduinoPinNumber = PINS_OFF[pinIndex];
         pinMode(arduinoPinNumber, OUTPUT);
+        digitalWrite(arduinoPinNumber, HIGH);
 
     }
 

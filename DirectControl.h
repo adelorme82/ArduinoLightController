@@ -11,6 +11,7 @@
 // #include <EthernetUdp.h>
 #include <WebServer.h>
 #include "Common.h"
+#include <TimeAlarms.h>
 
 extern const int PINS_ON[];
 extern const int PINS_OFF[];

@@ -1,5 +1,5 @@
 /*
-* Includes some debug statements, as well as common operators
+* Includes some debug functions, as well as common operators
 */
 #ifndef COMMON_H
 #define COMMON_H
